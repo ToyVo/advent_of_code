@@ -7,29 +7,61 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug executable 'day_01'",
+      "name": "day_01_2024",
       "cargo": {
-        "args": ["build", "--bin=day_01", "--package=day_01"],
+        "args": [
+          "build",
+          "--bin=day_01_2024",
+          "--package=day_01_2024"
+        ],
         "filter": {
-          "name": "day_01",
+          "name": "day_01_2024",
           "kind": "bin"
         }
       },
-      "args": ["day_01/sample.txt"],
+      "args": [
+        "day_01_2024/sample.txt"
+      ],
       "cwd": "${workspaceFolder}"
     },
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug unit tests in executable 'day_01'",
+      "name": "day_02_2024",
       "cargo": {
-        "args": ["test", "--no-run", "--bin=day_01", "--package=day_01"],
+        "args": [
+          "build",
+          "--bin=day_02_2024",
+          "--package=day_02_2024"
+        ],
         "filter": {
-          "name": "day_01",
+          "name": "day_02_2024",
           "kind": "bin"
         }
       },
-      "args": [],
+      "args": [
+        "day_02_2024/sample.txt"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "day_03_2024",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=day_03_2024",
+          "--package=day_03_2024"
+        ],
+        "filter": {
+          "name": "day_03_2024",
+          "kind": "bin"
+        }
+      },
+      "args": [
+        "day_03_2024/sample.txt"
+      ],
       "cwd": "${workspaceFolder}"
     }
   ]

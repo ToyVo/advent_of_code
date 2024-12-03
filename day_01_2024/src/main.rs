@@ -22,7 +22,7 @@ fn main() -> std::io::Result<()> {
         total + (a * num_a_in_list_2)
     });
 
-    println!("Day 1: Total distance: {total_distance} Similarity score: {similarity_score}");
+    println!("Day 1 2024: Total distance: {total_distance} Similarity score: {similarity_score}");
     Ok(())
 }
 
