@@ -4,6 +4,7 @@ use clap::Parser;
 #[command(version, about, long_about = None)]
 struct Args {
     /// input file to read
+    #[clap(default_value = "day_02_2024/sample.txt")]
     input: std::path::PathBuf,
 }
 
