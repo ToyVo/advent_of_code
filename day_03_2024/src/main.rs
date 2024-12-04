@@ -14,18 +14,30 @@ fn main() -> std::io::Result<()> {
 
     let file_contents = std::fs::read_to_string(&args.input)?;
 
+    let total = part_one(&file_contents);
+
+    let enabled_total = part_two(&file_contents);
+
+    println!("Day 3 2024: sum: {total}, enabled: {enabled_total}");
+    Ok(())
+}
+
+fn part_one<S: AsRef<str>>(s: S) -> i32 {
     let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
 
     let mut total = 0;
-    for (_, [a, b]) in re.captures_iter(&file_contents).map(|c| c.extract()) {
-        total += (a.parse::<i32>().unwrap() * b.parse::<i32>().unwrap());
+    for (_, [a, b]) in re.captures_iter(s.as_ref()).map(|c| c.extract()) {
+        total += a.parse::<i32>().unwrap() * b.parse::<i32>().unwrap();
     }
+    total
+}
 
-    let enabled_re = Regex::new(r"mul\(\d+,\d+\)|don't?\(\)|do?\(\)").unwrap();
+fn part_two<S: AsRef<str>>(s: S) -> i32 {
+    let re = Regex::new(r"mul\(\d+,\d+\)|don't?\(\)|do?\(\)").unwrap();
     let mut tabulate = true;
-    let mut enabled_total = 0;
-    for (full, _) in enabled_re
-        .captures_iter(&file_contents)
+    let mut total = 0;
+    for (full, _) in re
+        .captures_iter(s.as_ref())
         .map(|c| c.extract::<0>())
     {
         match full {
@@ -38,12 +50,29 @@ fn main() -> std::io::Result<()> {
             _ => {
                 if tabulate {
                     let (a, b) = full[4..(full.len() - 1)].split_once(',').unwrap();
-                    enabled_total += (a.parse::<i32>().unwrap() * b.parse::<i32>().unwrap());
+                    total += a.parse::<i32>().unwrap() * b.parse::<i32>().unwrap();
                 }
             }
         }
     }
+    total
+}
 
-    println!("Day 3 2024: sum: {total}, enabled: {enabled_total}");
-    Ok(())
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn part_one_sample() -> std::io::Result<()> {
+        let sample = std::fs::read_to_string("./sample.txt")?;
+        assert!(part_one(sample) == 161);
+        Ok(())
+    }
+
+    #[test]
+    fn part_two_sample() -> std::io::Result<()> {
+        let sample = std::fs::read_to_string("./sample2.txt")?;
+        let result = part_two(sample);
+        assert!(result == 48);
+        Ok(())
+    }
 }

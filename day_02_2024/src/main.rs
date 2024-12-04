@@ -13,9 +13,17 @@ fn main() -> std::io::Result<()> {
 
     let file_contents = std::fs::read_to_string(&args.input)?;
 
-    let reports = parse(&file_contents);
+    let num_safe_reports = part_one(&file_contents);
 
-    let num_safe_reports = reports
+    let dampened_safe_reports = part_two(&file_contents);
+
+    println!("Day 2 2024: Safe Reports: {num_safe_reports} Safe Reports: {dampened_safe_reports}");
+    Ok(())
+}
+
+fn part_one<S: AsRef<str>>(s: S) -> usize {
+    let reports = parse(s.as_ref());
+    reports
         .iter()
         .filter(|report| {
             let mut last_increasing = None;
@@ -34,11 +42,15 @@ fn main() -> std::io::Result<()> {
             }
             true
         })
-        .count();
+        .count()
+}
 
-    let dampened_safe_reports = reports
+fn part_two<S: AsRef<str>>(s: S) -> usize {
+    let reports = parse(s.as_ref());
+    reports
         .iter()
         .filter(|report| {
+            println!("{report:?}");
             let mut last_increasing = None;
             let mut flag = false;
             for i in 1..report.len() {
@@ -55,16 +67,12 @@ fn main() -> std::io::Result<()> {
                     } else {
                         flag = true;
                     }
-                } else {
-                    last_increasing = Some(increasing);
                 }
+                last_increasing = Some(increasing);
             }
             true
         })
-        .count();
-
-    println!("Day 2 2024: Safe Reports: {num_safe_reports} Safe Reports: {dampened_safe_reports}");
-    Ok(())
+        .count()
 }
 
 fn parse<S: AsRef<str>>(s: S) -> Vec<Vec<u32>> {
@@ -73,4 +81,23 @@ fn parse<S: AsRef<str>>(s: S) -> Vec<Vec<u32>> {
         reports.push(line.split(' ').map(|x| x.parse::<u32>().unwrap()).collect());
     }
     reports
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn part_one_sample() -> std::io::Result<()> {
+        let sample = std::fs::read_to_string("./sample.txt")?;
+        assert!(part_one(sample) == 2);
+        Ok(())
+    }
+
+    #[test]
+    fn part_two_sample() -> std::io::Result<()> {
+        let sample = std::fs::read_to_string("./sample.txt")?;
+        assert!(part_two(sample) == 4);
+        Ok(())
+    }
 }
