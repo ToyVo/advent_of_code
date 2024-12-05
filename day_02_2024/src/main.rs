@@ -4,7 +4,7 @@ use clap::Parser;
 #[command(version, about, long_about = None)]
 struct Args {
     /// input file to read
-    #[clap(default_value = "day_02_2024/sample.txt")]
+    #[clap(default_value = "day_02_2024/input.txt")]
     input: std::path::PathBuf,
 }
 
@@ -25,23 +25,7 @@ fn part_one<S: AsRef<str>>(s: S) -> usize {
     let reports = parse(s.as_ref());
     reports
         .iter()
-        .filter(|report| {
-            let mut last_increasing = None;
-            for i in 1..report.len() {
-                let a = report[i - 1];
-                let b = report[i];
-                let increasing = a < b;
-                let diff = a.abs_diff(b);
-                if last_increasing.is_some_and(|increase| increasing != increase)
-                    || diff == 0
-                    || diff > 3
-                {
-                    return false;
-                }
-                last_increasing = Some(increasing);
-            }
-            true
-        })
+        .filter(|report| is_safe(report))
         .count()
 }
 
@@ -50,25 +34,23 @@ fn part_two<S: AsRef<str>>(s: S) -> usize {
     reports
         .iter()
         .filter(|report| {
-            println!("{report:?}");
-            let mut last_increasing = None;
-            let mut flag = false;
-            for i in 1..report.len() {
-                let a = report[i - 1];
-                let b = report[i];
-                let increasing = a < b;
-                let diff = a.abs_diff(b);
-                if last_increasing.is_some_and(|increase| increasing != increase)
-                    || diff == 0
-                    || diff > 3
-                {
-                    if flag {
-                        return false;
-                    } else {
-                        flag = true;
+            if !is_safe(report) {
+                // For each index i, create a vector without the element at index i
+                for skip_index in 0..report.len() {
+                    let mut new_vec = Vec::with_capacity(report.len() - 1);
+
+                    // Add all elements except the one at skip_index
+                    for (current_index, element) in report.iter().enumerate() {
+                        if current_index != skip_index {
+                            new_vec.push(element.clone());
+                        }
+                    }
+
+                    if is_safe(&new_vec) {
+                        return true;
                     }
                 }
-                last_increasing = Some(increasing);
+                return false;
             }
             true
         })
@@ -81,6 +63,21 @@ fn parse<S: AsRef<str>>(s: S) -> Vec<Vec<u32>> {
         reports.push(line.split(' ').map(|x| x.parse::<u32>().unwrap()).collect());
     }
     reports
+}
+
+fn is_safe(s: &Vec<u32>) -> bool {
+    let mut last_increasing = None;
+    for i in 1..s.len() {
+        let a = s[i - 1];
+        let b = s[i];
+        let increasing = a < b;
+        let diff = a.abs_diff(b);
+        if last_increasing.is_some_and(|increase| increasing != increase) || diff == 0 || diff > 3 {
+            return false;
+        }
+        last_increasing = Some(increasing);
+    }
+    true
 }
 
 #[cfg(test)]
