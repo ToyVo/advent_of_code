@@ -57,14 +57,14 @@ mod test {
     #[test]
     fn part_one_sample() -> std::io::Result<()> {
         let sample = std::fs::read_to_string("./sample.txt")?;
-        assert!(part_one(sample) == 11);
+        assert_eq!(part_one(sample), 11);
         Ok(())
     }
 
     #[test]
     fn part_two_sample() -> std::io::Result<()> {
         let sample = std::fs::read_to_string("./sample.txt")?;
-        assert!(part_two(sample) == 31);
+        assert_eq!(part_two(sample), 31);
         Ok(())
     }
 }

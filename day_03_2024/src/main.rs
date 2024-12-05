@@ -36,10 +36,7 @@ fn part_two<S: AsRef<str>>(s: S) -> i32 {
     let re = Regex::new(r"mul\(\d+,\d+\)|don't?\(\)|do?\(\)").unwrap();
     let mut tabulate = true;
     let mut total = 0;
-    for (full, _) in re
-        .captures_iter(s.as_ref())
-        .map(|c| c.extract::<0>())
-    {
+    for (full, _) in re.captures_iter(s.as_ref()).map(|c| c.extract::<0>()) {
         match full {
             "do()" => {
                 tabulate = true;
@@ -64,7 +61,7 @@ mod test {
     #[test]
     fn part_one_sample() -> std::io::Result<()> {
         let sample = std::fs::read_to_string("./sample.txt")?;
-        assert!(part_one(sample) == 161);
+        assert_eq!(part_one(sample), 161);
         Ok(())
     }
 
@@ -72,7 +69,7 @@ mod test {
     fn part_two_sample() -> std::io::Result<()> {
         let sample = std::fs::read_to_string("./sample2.txt")?;
         let result = part_two(sample);
-        assert!(result == 48);
+        assert_eq!(result, 48);
         Ok(())
     }
 }

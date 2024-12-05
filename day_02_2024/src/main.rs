@@ -23,10 +23,7 @@ fn main() -> std::io::Result<()> {
 
 fn part_one<S: AsRef<str>>(s: S) -> usize {
     let reports = parse(s.as_ref());
-    reports
-        .iter()
-        .filter(|report| is_safe(report))
-        .count()
+    reports.iter().filter(|report| is_safe(report)).count()
 }
 
 fn part_two<S: AsRef<str>>(s: S) -> usize {
@@ -87,14 +84,14 @@ mod test {
     #[test]
     fn part_one_sample() -> std::io::Result<()> {
         let sample = std::fs::read_to_string("./sample.txt")?;
-        assert!(part_one(sample) == 2);
+        assert_eq!(part_one(sample), 2);
         Ok(())
     }
 
     #[test]
     fn part_two_sample() -> std::io::Result<()> {
         let sample = std::fs::read_to_string("./sample.txt")?;
-        assert!(part_two(sample) == 4);
+        assert_eq!(part_two(sample), 4);
         Ok(())
     }
 }
